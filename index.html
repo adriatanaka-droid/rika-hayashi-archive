@@ -89,7 +89,7 @@
     const first=markerFractions[0],second=markerFractions[1];
     let flight;if(p<.18)flight=smooth(0,.18,p)*first;else if(p<.42)flight=first;else if(p<.66)flight=first+smooth(.42,.66,p)*(second-first);else flight=second;
     markers.forEach((marker,i)=>{marker.style.opacity=i===step&&focus>.05?1:0;marker.classList.toggle('active',i===step&&focus>.15)});
-    const mobile=innerWidth<=620,cameraEase=(1-Math.cos(focus*Math.PI))/2,cameraPoint=riverPath.getPointAtLength(riverLength*flight),baseW=mobile?900:580,baseH=mobile?1050:820,viewW=baseW/(1+cameraEase*(mobile?.18:.3)),viewH=baseH/(1+cameraEase*(mobile?.18:.3)),eventPosition=mobile?(step===0?.36:.64):(step===0?.27:.73),horizontal=.5+(eventPosition-.5)*cameraEase,vertical=(mobile?.27:.2)+smooth(0,.14,p)*(mobile?.29:.34);
+    const mobile=innerWidth<=620,compact=innerWidth<=900,cameraEase=(1-Math.cos(focus*Math.PI))/2,cameraPoint=riverPath.getPointAtLength(riverLength*flight),baseW=compact?900:580,baseH=compact?1050:820,viewW=baseW/(1+cameraEase*(compact?.18:.3)),viewH=baseH/(1+cameraEase*(compact?.18:.3)),eventPosition=compact?(step===0?.36:.64):(step===0?.27:.73),horizontal=.5+(eventPosition-.5)*cameraEase,vertical=compact?.88-smooth(0,.18,p)*.3:.2+smooth(0,.14,p)*.34;
     svg.setAttribute('viewBox',`${cameraPoint.x-viewW*horizontal} ${cameraPoint.y-viewH*vertical} ${viewW} ${viewH}`);
     const reveal=Math.min(1,flight);riverLines.forEach(line=>line.style.strokeDashoffset=1-reveal);
     riverLines[1].style.strokeWidth=16-focus*4;riverLines[1].style.opacity=.83+focus*.12;riverLines[0].style.strokeWidth=30+focus*12;riverLines[0].style.opacity=.08+focus*.08;
