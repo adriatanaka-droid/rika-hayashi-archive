@@ -84,15 +84,15 @@
     const rect=journey.getBoundingClientRect(),scene=journey.querySelector('.journey-scene').getBoundingClientRect(),travel=journey.offsetHeight-innerHeight;
     const p=Math.max(0,Math.min(1,-rect.top/travel));
     const smooth=(a,b,x)=>{const t=Math.max(0,Math.min(1,(x-a)/(b-a)));return t*t*(3-2*t)};
-    startMarker.style.opacity=1-smooth(.02,.16,p);
+    startMarker.style.opacity=1-smooth(.005,.025,p);
     const f1=smooth(.18,.23,p)*(1-smooth(.34,.42,p)),f2=smooth(.66,.71,p);
     const step=p<.5?0:1,focus=step===0?f1:f2;
     const first=markerFractions[0],second=markerFractions[1];
-    let flight;if(p<.18)flight=smooth(0,.18,p)*first;else if(p<.42)flight=first;else if(p<.66)flight=first+smooth(.42,.66,p)*(second-first);else flight=second;
+    let flight;if(p<.18)flight=smooth(.025,.18,p)*first;else if(p<.42)flight=first;else if(p<.66)flight=first+smooth(.42,.66,p)*(second-first);else flight=second;
     markers.forEach((marker,i)=>{marker.style.opacity=i===step&&focus>.05?1:0;marker.classList.toggle('active',i===step&&focus>.15)});
     const mobile=innerWidth<=620,compact=innerWidth<=900,cameraEase=(1-Math.cos(focus*Math.PI))/2,cameraPoint=riverPath.getPointAtLength(riverLength*flight),baseW=compact?900:580,baseH=compact?1050:820,viewW=baseW/(1+cameraEase*(compact?.18:.3)),viewH=baseH/(1+cameraEase*(compact?.18:.3)),eventPosition=compact?(step===0?.36:.64):(step===0?.27:.73),horizontal=.5+(eventPosition-.5)*cameraEase,vertical=compact?.27+smooth(0,.14,p)*.29:.2+smooth(0,.14,p)*.34;startMarker.setAttribute('rx',compact?'28':'15');startMarker.setAttribute('ry',compact?'2':'5');
     svg.setAttribute('viewBox',`${cameraPoint.x-viewW*horizontal} ${cameraPoint.y-viewH*vertical} ${viewW} ${viewH}`);
-    const reveal=Math.min(1,flight);riverLines.forEach(line=>line.style.strokeDashoffset=1-reveal);riverTails.forEach(line=>line.style.strokeDashoffset=1-smooth(.02,.16,p));
+    const reveal=Math.min(1,flight);riverLines.forEach(line=>line.style.strokeDashoffset=1-reveal);riverTails.forEach(line=>line.style.strokeDashoffset=1-smooth(.025,.16,p));
     riverLines[1].style.strokeWidth=16-focus*4;riverLines[1].style.opacity=.83+focus*.12;riverLines[0].style.strokeWidth=30+focus*12;riverLines[0].style.opacity=.08+focus*.08;riverTails.forEach(line=>{const ghost=line.classList.contains('path-tail-ghost');line.style.strokeWidth=ghost?30+focus*12:16-focus*4;line.style.opacity=ghost?.08+focus*.08:.83+focus*.12});
     if(step!==shownStep){shownStep=step;m.querySelector('h2').textContent=milestones[step][0];m.querySelector('p').innerHTML=milestones[step][1]+(milestones[step][2]?`<small>${milestones[step][2]}</small>`:'');document.querySelector('.counter').textContent=String(step+1).padStart(2,'0')+' / 02'}
     const dot=markers[step].getBoundingClientRect();m.style.bottom='auto';m.style.right='auto';if(mobile){m.style.left='9vw';m.style.top=Math.min(innerHeight-280,dot.bottom-scene.top+24)+'px';m.style.transform='none';m.style.textAlign='left'}else if(step===0){m.style.left=Math.max(dot.right-scene.left+42,innerWidth*.57)+'px';m.style.transform='none';m.style.textAlign='left';const info=m.querySelector('p');m.style.top=(dot.top-scene.top+dot.height/2-info.offsetTop-info.offsetHeight)+'px'}else{m.style.left=(dot.left-scene.left-42)+'px';m.style.transform='translateX(-100%)';m.style.textAlign='right';const info=m.querySelector('p');m.style.top=(dot.top-scene.top+dot.height/2-info.offsetTop-info.offsetHeight)+'px'}m.style.opacity=focus>.05?1:0;m.classList.add('live');
