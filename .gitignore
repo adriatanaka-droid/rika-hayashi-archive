@@ -4,3 +4,4 @@ dist/
 .wrangler/
 .wrangler-home/
 .DS_Store
+chesso/
